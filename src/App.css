@@ -1,0 +1,27 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+.app-container h1 {
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.app-description {
+  color: #64748b;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+  text-align: center;
+  max-width: 600px;
+}

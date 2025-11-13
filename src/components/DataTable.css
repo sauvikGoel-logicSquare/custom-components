@@ -1,0 +1,320 @@
+.data-table-container {
+  width: 100%;
+  max-width: 1000px;
+  overflow-x: auto;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.table-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.column-visibility-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #475569;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.column-visibility-trigger:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.column-visibility-trigger:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.column-icon {
+  cursor: pointer;
+  color: #667eea;
+  transition: transform 0.2s ease;
+}
+
+.column-visibility-trigger:hover .column-icon {
+  transform: scale(1.1);
+  color: #764ba2;
+}
+
+.column-dropdown-content {
+  min-width: 220px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.column-checkbox-item {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+  user-select: none;
+}
+
+.column-checkbox-item:hover {
+  background-color: #f1f5f9;
+}
+
+.column-checkbox-item:focus {
+  background-color: #e2e8f0;
+  outline: none;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Header Styles */
+.table-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-row {
+  border-bottom: none;
+}
+
+.header-cell {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: transparent;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 6px;
+}
+
+.header-label-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.header-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Tooltip icon styling (Info icon from lucide-react) */
+.header-tooltip-icon {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: help;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.header-tooltip-icon:hover {
+  opacity: 1;
+  color: #ffffff;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+/* Action icons (Sort, Filter) - Shadcn style */
+.header-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-action-icon-svg {
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.header-action-icon-svg:hover {
+  opacity: 1;
+  color: #ffffff;
+  transform: scale(1.15);
+}
+
+.header-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 48px; /* Match header cell height */
+  padding: 0;
+}
+
+.header-checkbox-wrapper > div {
+  border: 2px solid #ffffff !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.header-checkbox-wrapper > div[aria-checked="true"] {
+  background-color: #4f46e5 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.header-cell:first-child {
+  border-top-left-radius: 12px;
+}
+
+.header-cell:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Body Styles */
+.table-body {
+  background-color: #ffffff;
+}
+
+.body-row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+}
+
+.body-row:hover {
+  background-color: #f8fafc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.body-row-selected {
+  background-color: #e7f3ff !important;
+  border-left: 3px solid #0066cc;
+}
+
+.body-row-selected:hover {
+  background-color: #d0e7ff !important;
+}
+
+.body-cell-clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.body-cell-clickable:hover {
+  background-color: #e0e7ff;
+  text-decoration: underline;
+  color: #4f46e5;
+  font-weight: 500;
+}
+
+.body-cell-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.body-row:last-child {
+  border-bottom: none;
+}
+
+.body-cell {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1e293b;
+  vertical-align: middle;
+}
+
+/* Center checkbox in body cells */
+.body-cell:first-child {
+  text-align: center;
+  padding: 16px 20px;
+}
+
+.body-cell:first-child > div {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Body action icons styling */
+.body-action-icon {
+  width: 16px;
+  height: 16px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.body-action-icon:hover {
+  color: #1e293b;
+  transform: scale(1.15);
+}
+
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .data-table-container {
+    overflow-x: scroll;
+  }
+
+  .header-cell,
+  .body-cell {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+

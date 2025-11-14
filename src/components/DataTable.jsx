@@ -35,6 +35,10 @@ import "./DataTable.css";
  *
  * @param {string|number} selectedRowId - Optional selected row ID for highlighting
  *
+ * @param {string} selectedRowClassName - Optional custom CSS class name to apply to selected row
+ *   This class will be added IN ADDITION to the default "body-row-selected" class
+ *   allowing you to add custom styling while keeping the default highlight
+ *
  * @param {string} size - Optional table size variant ("small", "medium", "large")
  *   - small: Compact table (max-width: 600px, max-height: 400px, smaller fonts)
  *   - medium: Default size (max-width: 1000px, max-height: 600px)
@@ -58,7 +62,7 @@ function DataTable({
   data,
   headerData,
   // onRowClick = null,
-  selectedRowId = null,
+  selectedRowClassName = "", // optional class name to apply to the selected row
 
   // Pagination props
   currentPage = 1,
@@ -358,7 +362,8 @@ function DataTable({
           <TableBody
             table={table}
             // onRowClick={onRowClick ? handleRowClick : null}
-            selectedRowId={selectedRowId}
+            selectedIds={selectedIds}
+            selectedRowClassName={selectedRowClassName}
           />
         </table>
 

@@ -325,6 +325,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Selected row styling */
 .body-row-selected {
   background-color: #e7f3ff !important;
   border-left: 3px solid #0066cc;
@@ -333,6 +334,28 @@
 .body-row-selected:hover {
   background-color: #d0e7ff !important;
 }
+
+/* 
+  Custom selected row styling examples:
+  Add these to your own CSS file and pass the class name via selectedRowClassName prop
+  
+  Example 1 - Purple highlight:
+  .custom-purple-selected {
+    background-color: #f3e8ff !important;
+    border-left-color: #9333ea !important;
+  }
+  
+  Example 2 - Green highlight:
+  .custom-green-selected {
+    background-color: #dcfce7 !important;
+    border-left-color: #16a34a !important;
+  }
+  
+  Example 3 - Add shadow:
+  .custom-shadow-selected {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+*/
 
 .body-cell-clickable {
   cursor: pointer;

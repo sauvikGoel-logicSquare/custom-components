@@ -6,12 +6,13 @@ import { flexRender } from "@tanstack/react-table";
  * Supports JSX elements directly in cell data
  * @param {Object} table - TanStack Table instance
  * @param {Function} onRowClick - Function to call when a row is clicked
- * @param {string|number} selectedRowId - ID of the currently selected row
+ * @param {string|number} selectedIds - IDs of the currently selected rows
  */
 function TableBody({
   table,
   // onRowClick
-  selectedRowId,
+  selectedIds,
+  selectedRowClassName,
 }) {
   return (
     <tbody className="table-body">
@@ -33,7 +34,7 @@ function TableBody({
        * - The table instance is created in DataTable.jsx using useReactTable() hook
        */}
       {table.getRowModel().rows.map((row) => {
-        const isSelected = selectedRowId === row.id;
+        const isSelected = selectedIds?.includes(row?.id);
         // Check if this row's name cell should be clickable
         // Add isClickable: true/false in your data object to control which names are clickable
         // Example: { name: "Alice", isClickable: true } - Alice's name is clickable
@@ -42,10 +43,16 @@ function TableBody({
           /* const isNameClickable = row.original.isClickable !== false; // Default true, set false to disable */
         }
 
+        {
+          /* console.log({ selectedIds, isSelected, selectedRowClassName, row }); */
+        }
+
         return (
           <tr
             key={row.id}
-            className={`body-row ${isSelected ? "body-row-selected" : ""}`}
+            className={`body-row ${isSelected ? "body-row-selected" : ""} ${
+              isSelected && selectedRowClassName ? selectedRowClassName : ""
+            }`}
           >
             {/**
              * row.getVisibleCells() - TanStack Table Method

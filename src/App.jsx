@@ -40,7 +40,6 @@ function App() {
   // Modal state management
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const [selectedRowId, setSelectedRowId] = useState(null);
 
   // API data and pagination state
   const [candidatesData, setCandidatesData] = useState([]);
@@ -59,8 +58,8 @@ function App() {
    * Opens modal with row data
    */
   const handleRowClick = (rowData, rowId) => {
+    console.log({ rowData, rowId });
     setSelectedRowData(rowData);
-    setSelectedRowId(rowId);
     setIsModalOpen(true);
   };
 
@@ -817,7 +816,7 @@ function App() {
               headerData={headerData}
               //for modal open when click on row name open modal
               onRowClick={handleRowClick}
-              selectedRowId={selectedRowId}
+              selectedRowClassName="bg-red-500'"
               // pagination props
               showPagination={true}
               currentPage={currentPage}

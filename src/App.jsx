@@ -350,7 +350,12 @@ function App() {
               gap: "4px",
             }}
           >
-            <span style={{ color: "#667eea", fontWeight: "600" }}>{name}</span>
+            <span
+              style={{ color: "#667eea", fontWeight: "600", cursor: "pointer" }}
+              onClick={() => handleRowClick(candidate, candidateId)}
+            >
+              {name}
+            </span>
             <div
               style={{
                 display: "flex",
@@ -386,7 +391,9 @@ function App() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <a href={`tel:${phone}`}>{phone}</a>
+                    <a style={{ color: "#fff" }} href={`tel:${phone}`}>
+                      {phone}
+                    </a>
                   </TooltipContent>
                 </Tooltip>
               )}
@@ -417,7 +424,9 @@ function App() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <a href={`mailto:${email}`}>{email}</a>
+                    <a style={{ color: "#fff" }} href={`mailto:${email}`}>
+                      {email}
+                    </a>
                   </TooltipContent>
                 </Tooltip>
               )}
@@ -534,8 +543,8 @@ function App() {
     {
       accessorKey: "name",
       label: "Name",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Candidate name",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -552,8 +561,8 @@ function App() {
     {
       accessorKey: "designation",
       label: "Designation",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Current job designation",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -570,8 +579,8 @@ function App() {
     {
       accessorKey: "currentCompany",
       label: "Current Company",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Current employer",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -588,8 +597,8 @@ function App() {
     {
       accessorKey: "jobFunction",
       label: "Job Function",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Job function or department",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -606,8 +615,8 @@ function App() {
     {
       accessorKey: "experience",
       label: "Exp.",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Years of experience",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -624,8 +633,8 @@ function App() {
     {
       accessorKey: "ctc",
       label: "CTC",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Current CTC (Cost to Company)",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -642,8 +651,8 @@ function App() {
     {
       accessorKey: "ectc",
       label: "ECTC",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Expected CTC",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -662,6 +671,7 @@ function App() {
       label: "Notice Period",
       tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Notice period in days",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -678,8 +688,8 @@ function App() {
     {
       accessorKey: "currentLocation",
       label: "Current Location",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Current location",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -696,8 +706,8 @@ function App() {
     {
       accessorKey: "lastUpdated",
       label: "Last Updated",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Last updated date",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -714,8 +724,8 @@ function App() {
     {
       accessorKey: "applications",
       label: "Applications",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Number of applications",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -732,8 +742,8 @@ function App() {
     {
       accessorKey: "status",
       label: "Status",
-      tooltip: <Info className="header-tooltip-icon" />,
       tooltipText: "Application status",
+      // icons for sorting and filtering
       icons: [
         <ArrowUpDown
           key="sort"
@@ -802,11 +812,13 @@ function App() {
               </div>
             )}
             <DataTable
+              size="large"
               data={data}
               headerData={headerData}
               //for modal open when click on row name open modal
               onRowClick={handleRowClick}
               selectedRowId={selectedRowId}
+              // pagination props
               showPagination={true}
               currentPage={currentPage}
               totalPages={totalPages}
@@ -816,8 +828,11 @@ function App() {
               onPageSizeChange={handlePageSizeChange}
               pageSizeOptions={[10, 20, 50, 100]}
               //for selection checkboxes
+              showSelectionCheckbox={true}
               selectedIds={selectedIds}
               onSelection={handleSelection}
+              // show/hide columns list, -- pass the accessorKey of the columns to show/hide
+              showColumnsList={["designation", "currentCompany"]}
             />
           </>
         )}

@@ -35,6 +35,11 @@ import "./DataTable.css";
  *
  * @param {string|number} selectedRowId - Optional selected row ID for highlighting
  *
+ * @param {string} size - Optional table size variant ("small", "medium", "large")
+ *   - small: Compact table (max-width: 600px, max-height: 400px, smaller fonts)
+ *   - medium: Default size (max-width: 1000px, max-height: 600px)
+ *   - large: Expanded table (max-width: 1400px, max-height: 800px, larger fonts)
+ *
  *   Example:
  *   [{
  *     accessorKey: "name",
@@ -52,8 +57,9 @@ import "./DataTable.css";
 function DataTable({
   data,
   headerData,
-  onRowClick = null,
+  // onRowClick = null,
   selectedRowId = null,
+
   // Pagination props
   currentPage = 1,
   totalPages = 1,
@@ -66,8 +72,19 @@ function DataTable({
   // Selection props - simple array and one function
   selectedIds = [],
   onSelection = null,
+  showSelectionCheckbox = false,
+
+  showColumnsList = [],
+  size = "medium", // small, medium, large
 }) {
-  const [columnVisibility, setColumnVisibility] = useState({});
+  // Initialize columnVisibility with all columns in showColumnsList hidden by default, then user can show/hide the columns by clicking the "Show Columns" dropdown
+  const [columnVisibility, setColumnVisibility] = useState(() => {
+    const initialVisibility = {};
+    showColumnsList?.forEach((columnId) => {
+      initialVisibility[columnId] = false;
+    });
+    return initialVisibility;
+  });
 
   /**
    * Generate columns from headerData array
@@ -203,8 +220,13 @@ function DataTable({
       },
     };
 
-    return [checkboxColumn, ...regularColumns];
-  }, [headerData, data, selectedIds, onSelection]);
+    // If showSelectionCheckbox is true, add the checkbox column to the beginning of the columns array
+    if (showSelectionCheckbox) {
+      return [checkboxColumn, ...regularColumns];
+    } else {
+      return regularColumns;
+    }
+  }, [headerData, data, selectedIds, onSelection, showSelectionCheckbox]);
 
   /**
    * useReactTable() - TanStack Table Hook
@@ -269,18 +291,20 @@ function DataTable({
    * - Calls the onRowClick callback if provided
    * - Parent component manages selectedRowId state externally
    */
-  const handleRowClick = (rowData, rowId) => {
-    // Call the parent's onRowClick callback if provided
-    // Parent will update selectedRowId state externally
-    if (onRowClick) {
-      onRowClick(rowData, rowId);
-    }
-  };
+  // const handleRowClick = (rowData, rowId) => {
+  //   // Call the parent's onRowClick callback if provided
+  //   // Parent will update selectedRowId state externally
+  //   if (onRowClick) {
+  //     onRowClick(rowData, rowId);
+  //   }
+  // };
 
-  // Get all columns except the checkbox column for visibility dropdown
-  const allColumns = table.getAllColumns().filter((column) => {
-    return column.id !== "select";
-  });
+  // Get all columns except the checkbox column for visibility dropdown -- to show the columns list in the dropdown that can be triggered by the user to show/hide the columns
+
+  const showHideColumnsList =
+    table?.getAllColumns()?.filter((column) => {
+      return column?.id !== "select" && showColumnsList?.includes(column?.id);
+    }) || [];
 
   // Create a map for quick lookup of header labels by column id
   const headerLabelMap = {};
@@ -291,7 +315,7 @@ function DataTable({
   }
 
   return (
-    <div className="data-table-container">
+    <div className={`data-table-wrapper data-table-wrapper-${size}`}>
       <div className="table-controls">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -307,7 +331,7 @@ function DataTable({
           <DropdownMenuContent align="end" className="column-dropdown-content">
             <DropdownMenuLabel>Show/Hide Columns</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {allColumns.map((column) => {
+            {showHideColumnsList?.map((column) => {
               const columnId = column.id;
               const columnLabel = headerLabelMap[columnId] || columnId;
               const isVisible = column.getIsVisible();
@@ -328,25 +352,28 @@ function DataTable({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <table className="data-table">
-        <TableHeader table={table} headerData={headerData} />
-        <TableBody
-          table={table}
-          onRowClick={onRowClick ? handleRowClick : null}
-          selectedRowId={selectedRowId}
-        />
-      </table>
-      {showPagination && (
-        <PaginationComponent
-          currentPage={currentPage}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          totalItems={totalItems}
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-          pageSizeOptions={pageSizeOptions}
-        />
-      )}
+      <div className={`data-table-container data-table-container-${size}`}>
+        <table className={`data-table data-table-${size}`}>
+          <TableHeader table={table} headerData={headerData} />
+          <TableBody
+            table={table}
+            // onRowClick={onRowClick ? handleRowClick : null}
+            selectedRowId={selectedRowId}
+          />
+        </table>
+
+        {showPagination && (
+          <PaginationComponent
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+            pageSizeOptions={pageSizeOptions}
+          />
+        )}
+      </div>
     </div>
   );
 }

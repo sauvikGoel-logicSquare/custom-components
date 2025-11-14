@@ -1,4 +1,6 @@
 import { flexRender } from "@tanstack/react-table";
+import { Info } from "lucide-react";
+import ToolTipBubble from "./ToolTipBubble";
 
 /**
  * TableHeader Component
@@ -68,11 +70,52 @@ function TableHeader({ table, headerData = [] }) {
                             header.getContext()
                           )}
                       </span>
-                      {headerConfig.tooltip && (
-                        <span title={headerConfig.tooltipText || ""}>
-                          {headerConfig.tooltip}
-                        </span>
-                      )}
+
+                      {/* tooltip utility -- tooltipText is required to show the tooltip, tooltip is optional to show custom tooltip icon */}
+                      {headerConfig?.tooltipText ? (
+                        <div
+                          className="header-tooltip-trigger"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            marginLeft: 2,
+                            position: "relative",
+                          }}
+                          tabIndex={0}
+                          onClick={(e) => e.stopPropagation()} // Prevent header sort on icon click
+                          onMouseEnter={(e) => {
+                            const tip = e.currentTarget.querySelector(
+                              ".header-tooltip-popover"
+                            );
+                            if (tip) tip.style.visibility = "visible";
+                          }}
+                          onMouseLeave={(e) => {
+                            const tip = e.currentTarget.querySelector(
+                              ".header-tooltip-popover"
+                            );
+                            if (tip) tip.style.visibility = "hidden";
+                          }}
+                        >
+                          {/* show custom tooltip icon if provided, otherwise show default tooltip icon */}
+                          {headerConfig?.tooltip ? (
+                            headerConfig?.tooltip
+                          ) : (
+                            <Info
+                              className="header-tooltip-icon"
+                              style={{
+                                color: "#fff",
+                                transition: "color 0.2s",
+                              }}
+                              size={16}
+                            />
+                          )}
+
+                          {/* tooltip bubble */}
+                          <ToolTipBubble
+                            tooltipText={headerConfig?.tooltipText || ""}
+                          />
+                        </div>
+                      ) : null}
                     </div>
                     <div className="header-actions">
                       {headerConfig.icons &&

@@ -8,7 +8,11 @@ import { flexRender } from "@tanstack/react-table";
  * @param {Function} onRowClick - Function to call when a row is clicked
  * @param {string|number} selectedRowId - ID of the currently selected row
  */
-function TableBody({ table, onRowClick, selectedRowId }) {
+function TableBody({
+  table,
+  // onRowClick
+  selectedRowId,
+}) {
   return (
     <tbody className="table-body">
       {/**
@@ -34,7 +38,9 @@ function TableBody({ table, onRowClick, selectedRowId }) {
         // Add isClickable: true/false in your data object to control which names are clickable
         // Example: { name: "Alice", isClickable: true } - Alice's name is clickable
         //          { name: "Bob", isClickable: false } - Bob's name is disabled
-        const isNameClickable = row.original.isClickable !== false; // Default true, set false to disable
+        {
+          /* const isNameClickable = row.original.isClickable !== false; // Default true, set false to disable */
+        }
 
         return (
           <tr
@@ -81,21 +87,24 @@ function TableBody({ table, onRowClick, selectedRowId }) {
                * The checkboxColumn.cell function handles everything.
                */
 
-              // Only make "name" column clickable, and only if row allows it
-              const isNameColumn = cell.column.id === "name";
-              const isClickable = isNameColumn && onRowClick && isNameClickable;
+              {
+                /* // Only make "name" column clickable, and only if row allows it
+              const isNameColumn = cell.column.id === "name"; */
+              }
+              {
+                /* const isClickable = onRowClick && isNameClickable; */
+              }
 
               return (
                 <td
                   key={cell.id}
-                  className={`body-cell ${
-                    isClickable ? "body-cell-clickable" : ""
-                  } ${
-                    isNameColumn && !isNameClickable ? "body-cell-disabled" : ""
-                  }`}
-                  onClick={() =>
-                    isClickable && onRowClick(row.original, row.id)
-                  }
+                  className={`body-cell`}
+                  // className={`body-cell ${
+                  //   isClickable ? "body-cell-clickable" : ""
+                  // } ${!isNameClickable ? "body-cell-disabled" : ""}`}
+                  // onClick={() =>
+                  //   isClickable && onRowClick(row.original, row.id)
+                  // }
                 >
                   {/**
                    * flexRender() - Renders the cell content

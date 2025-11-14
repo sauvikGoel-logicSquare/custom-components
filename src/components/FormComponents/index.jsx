@@ -1,7 +1,8 @@
 import React from "react";
 import CustomInput from "./CustomInput";
+import CustomButton from "./CustomButton";
 import { useState } from "react";
-import { User, X } from "lucide-react";
+import { User, X, Save, Download, RefreshCcw } from "lucide-react";
 
 const CustomForm = () => {
   const [formFields, setFormFields] = useState({
@@ -53,8 +54,8 @@ const CustomForm = () => {
   console.log({ errors, isDirty, formFields });
 
   return (
-    <>
-      <h1>CustomForm component</h1>
+    <div className="space-y-6 p-6">
+      <h1 className="text-2xl font-bold">CustomForm component</h1>
 
       <CustomInput
         label="Name"
@@ -66,7 +67,54 @@ const CustomForm = () => {
         isDirty={isDirty?.name}
         isRequired
       />
-    </>
+
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomButton Examples</h2>
+
+        <div className="flex flex-wrap gap-4">
+          <CustomButton text="Default Button" />
+
+          <CustomButton
+            text="With Left Icon"
+            leftIcon={<User className="h-4 w-4" />}
+          />
+
+          <CustomButton
+            text="With Right Icon"
+            rightIcon={<Save className="h-4 w-4" />}
+            variant="secondary"
+          />
+
+          <CustomButton text="Loading" loading={true} variant="outline" />
+
+          <CustomButton text="Small Button" btnSize="sm" />
+
+          <CustomButton text="Large Button" btnSize="lg" />
+
+          <CustomButton text="Disabled" disabled={true} />
+
+          {/* icon with text */}
+          <CustomButton
+            text="Download"
+            leftIcon={<Download className="h-4 w-4" />}
+            variant="ghost"
+          />
+
+          {/* only icon */}
+          <CustomButton
+            btnSize="icon"
+            variant="ghost"
+            leftIcon={<RefreshCcw className="h-4 w-4" />}
+          />
+        </div>
+
+        <CustomButton
+          text="Full Width Button"
+          fullWidth={true}
+          className="mt-4"
+        />
+      </div>
+    </div>
   );
 };
 

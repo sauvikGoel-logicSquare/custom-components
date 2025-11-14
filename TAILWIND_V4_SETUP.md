@@ -7,6 +7,7 @@ Tailwind CSS v4 introduced significant changes to how it integrates with PostCSS
 ### 1. PostCSS Plugin
 
 **Before (Tailwind v3):**
+
 ```js
 // postcss.config.js
 export default {
@@ -14,23 +15,25 @@ export default {
     tailwindcss: {},
     autoprefixer: {},
   },
-}
+};
 ```
 
 **After (Tailwind v4):**
+
 ```js
 // postcss.config.js
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},  // ← New separate package
+    "@tailwindcss/postcss": {}, // ← New separate package
     autoprefixer: {},
   },
-}
+};
 ```
 
 ### 2. CSS Import Syntax
 
 **Before (Tailwind v3):**
+
 ```css
 @tailwind base;
 @tailwind components;
@@ -38,6 +41,7 @@ export default {
 ```
 
 **After (Tailwind v4):**
+
 ```css
 @import "tailwindcss";
 ```
@@ -56,6 +60,7 @@ Tailwind v4 introduces the `@theme` directive for defining custom design tokens 
 ```
 
 This allows you to:
+
 - Define colors, radii, spacing, etc. in CSS
 - Use CSS variables that update at runtime
 - Simplify the tailwind.config.js file
@@ -63,26 +68,32 @@ This allows you to:
 ### 4. Simplified Configuration File
 
 **Before (Tailwind v3):**
+
 ```js
 export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      colors: { /* lots of config */ },
-      borderRadius: { /* more config */ },
+      colors: {
+        /* lots of config */
+      },
+      borderRadius: {
+        /* more config */
+      },
       // ... many more theme extensions
     },
   },
   plugins: [],
-}
+};
 ```
 
 **After (Tailwind v4):**
+
 ```js
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-}
+};
 ```
 
 Most configuration now lives in CSS using `@theme`!
@@ -90,11 +101,13 @@ Most configuration now lives in CSS using `@theme`!
 ## Installed Packages
 
 ### Dependencies
+
 - `clsx@2.1.1` - Conditional class names utility
 - `tailwind-merge@3.4.0` - Merge Tailwind classes intelligently
 - `@radix-ui/react-label@2.1.8` - Accessible label component
 
 ### Dev Dependencies
+
 - `tailwindcss@4.1.17` - Tailwind CSS v4
 - `@tailwindcss/postcss@4.1.17` - PostCSS plugin for Tailwind v4
 - `postcss@8.5.6` - CSS processor
@@ -118,6 +131,7 @@ All ShadCN UI colors are defined in `src/index.css` using both:
 2. **CSS variables** - For runtime theming and component usage
 
 This dual approach ensures:
+
 - Tailwind utilities like `bg-primary` work correctly
 - Components can use `hsl(var(--primary))` for dynamic theming
 - Dark mode switching works seamlessly
@@ -150,7 +164,7 @@ This dual approach ensures:
 ### Using CSS Variables (for dynamic theming)
 
 ```jsx
-<div style={{ background: 'hsl(var(--primary))' }}>
+<div style={{ background: "hsl(var(--primary))" }}>
   Dynamic Primary Background
 </div>
 ```
@@ -161,11 +175,8 @@ This dual approach ensures:
 import { cn } from "@/lib/utils";
 
 <input
-  className={cn(
-    "border-input bg-background",
-    error && "border-destructive"
-  )}
-/>
+  className={cn("border-input bg-background", error && "border-destructive")}
+/>;
 ```
 
 ## Benefits of Tailwind v4
@@ -213,15 +224,18 @@ All features work seamlessly with the new Tailwind v4 setup!
 ## Troubleshooting
 
 ### If you see PostCSS errors:
+
 - Ensure `@tailwindcss/postcss` is installed
 - Check that `postcss.config.js` uses `'@tailwindcss/postcss'` (with quotes)
 
 ### If colors don't work:
+
 - Verify colors are defined in both `@theme` and `:root` sections
 - Check that color names use `--color-*` prefix in `@theme`
 - Ensure CSS variables in `:root` don't have the `--color-` prefix
 
 ### If build fails:
+
 - Make sure `clsx` and `tailwind-merge` are in dependencies (not devDependencies)
 - Run `yarn install` to ensure all packages are properly installed
 
@@ -230,4 +244,3 @@ All features work seamlessly with the new Tailwind v4 setup!
 - [Tailwind CSS v4 Announcement](https://tailwindcss.com/blog/tailwindcss-v4-alpha)
 - [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)
 - [ShadCN UI](https://ui.shadcn.com/)
-

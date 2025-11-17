@@ -2,10 +2,13 @@ import React from "react";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
 import CustomInputGroup from "./CustomInputGroup";
+import CustomSpinner from "./CustomSpinner";
+import CustomBadge from "./CustomBadge";
+import CustomSwitch from "./CustomSwitch";
+import CustomLogo from "./CustomLogo";
 import { useState } from "react";
 import {
   User,
-  X,
   Save,
   Download,
   RefreshCcw,
@@ -13,6 +16,8 @@ import {
   Phone,
   MapPin,
   Building2,
+  Star,
+  Check,
 } from "lucide-react";
 
 const CustomForm = () => {
@@ -46,6 +51,11 @@ const CustomForm = () => {
     zipCode: "",
     country: "",
   });
+
+  // Additional state for new components
+  const [switchEnabled, setSwitchEnabled] = useState(false);
+  const [switchWithLabel, setSwitchWithLabel] = useState(true);
+  const [requiredSwitch, setRequiredSwitch] = useState(false);
 
   const _onChangeFormFields = (key, value) => {
     const newFormFields = { ...formFields };
@@ -237,6 +247,137 @@ const CustomForm = () => {
           fullWidth={true}
           className="mt-4"
         />
+      </div>
+
+      {/* CustomSpinner Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomSpinner Examples</h2>
+        <div className="flex flex-wrap items-center gap-8">
+          <div className="flex flex-col items-center gap-2">
+            <CustomSpinner />
+            <span className="text-xs text-gray-500">Default</span>
+          </div>
+
+          <CustomSpinner size="sm" label="Small" />
+
+          <CustomSpinner size="lg" label="Large" />
+          <CustomSpinner size="xl" label="Extra Large" />
+          <CustomSpinner label="Loading..." />
+          <CustomSpinner size="lg" label="Please wait..." color="#10b981" />
+
+          <CustomSpinner variant="dotted" label="Dotted" />
+        </div>
+      </div>
+
+      {/* CustomBadge Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomBadge Examples</h2>
+        <div className="flex flex-wrap gap-3">
+          <CustomBadge text="Default" />
+          <CustomBadge text="Secondary" variant="secondary" />
+          <CustomBadge text="Success" variant="success" />
+          <CustomBadge text="Warning" variant="warning" />
+          <CustomBadge text="Destructive" variant="destructive" />
+          <CustomBadge text="Outline" variant="outline" />
+          <CustomBadge text="Small" variant="success" size="sm" />
+          <CustomBadge text="Large" size="lg" />
+          <CustomBadge
+            text="With Icon"
+            leftIcon={<Star className="h-3 w-3" />}
+          />
+          <CustomBadge
+            text="With Dot"
+            dot
+            // dotColor="#10b981"
+            leftIcon={<Check className="h-3 w-3" />}
+            variant="success"
+          />
+          <CustomBadge
+            text="Removable"
+            variant="secondary"
+            onRemove={() => alert("Badge removed!")}
+          />
+        </div>
+      </div>
+
+      {/* CustomSwitch Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomSwitch Examples</h2>
+        <div className="space-y-4">
+          <CustomSwitch
+            checked={switchEnabled}
+            onCheckedChange={setSwitchEnabled}
+          />
+          <CustomSwitch
+            label="Enable notifications"
+            description="Receive email notifications about your account activity"
+            checked={switchWithLabel}
+            onCheckedChange={setSwitchWithLabel}
+          />
+          <CustomSwitch
+            label="Required setting"
+            description="This is a required setting"
+            checked={requiredSwitch}
+            onCheckedChange={setRequiredSwitch}
+            required
+          />
+          <CustomSwitch
+            label="Disabled switch"
+            description="This switch is currently disabled"
+            disabled
+          />
+          <div style={{ display: "flex", gap: "16px" }}>
+            <CustomSwitch
+              label="Label on right"
+              labelPosition="right"
+              checked={true}
+            />
+            <CustomSwitch
+              label="Label on left"
+              labelPosition="left"
+              checked={true}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* CustomLogo Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomLogo Examples</h2>
+        <div className="flex flex-wrap items-center gap-8">
+          <div className="flex flex-col items-center gap-2">
+            <CustomLogo
+              size="sm"
+              alt="Small Logo"
+              src="https://avatar.iran.liara.run/public/90"
+            />
+            <span className="text-xs text-gray-500">Small (40x40)</span>
+          </div>
+
+          <div className="flex flex-col items-center gap-2">
+            <CustomLogo alt="Default Logo" />
+            <span className="text-xs text-gray-500">Default (100x100)</span>
+          </div>
+
+          <div className="flex flex-col items-center gap-2">
+            <CustomLogo size="lg" alt="Large Logo" />
+            <span className="text-xs text-gray-500">Large (150x150)</span>
+          </div>
+
+          <CustomLogo
+            src="https://avatar.iran.liara.run/public/20"
+            alt="Custom Logo"
+          />
+
+          <div className="flex flex-col items-center gap-2">
+            <CustomLogo
+              src="invalid-url.jpg"
+              fallbackSrc="https://avatar.iran.liara.run/public/71"
+              alt="With Fallback"
+            />
+            <span className="text-xs text-gray-500">With Fallback</span>
+          </div>
+        </div>
       </div>
     </div>
   );

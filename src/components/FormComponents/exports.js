@@ -2,3 +2,7 @@
 export { default as CustomInput } from "./CustomInput";
 export { default as CustomButton } from "./CustomButton";
 export { default as CustomInputGroup } from "./CustomInputGroup";
+export { default as CustomSpinner } from "./CustomSpinner";
+export { default as CustomBadge } from "./CustomBadge";
+export { default as CustomSwitch } from "./CustomSwitch";
+export { default as CustomLogo } from "./CustomLogo";

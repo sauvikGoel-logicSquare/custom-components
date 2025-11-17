@@ -6,6 +6,7 @@ import CustomSpinner from "./CustomSpinner";
 import CustomBadge from "./CustomBadge";
 import CustomSwitch from "./CustomSwitch";
 import CustomLogo from "./CustomLogo";
+import CustomCard from "./CustomCard";
 import { useState } from "react";
 import {
   User,
@@ -377,6 +378,308 @@ const CustomForm = () => {
             />
             <span className="text-xs text-gray-500">With Fallback</span>
           </div>
+        </div>
+      </div>
+
+      {/* CustomCard Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomCard Examples</h2>
+
+        <div className="flex gap-4 flex-wrap">
+          {/* Info Card - matching the design shown */}
+          <CustomCard
+            title="Basic Info"
+            headerBgColor="#EEF2FF"
+            footer={
+              <div className="flex gap-2">
+                <CustomButton text="Cancel" variant="outline" />
+                <CustomButton text="Save" variant="default" />
+              </div>
+            }
+            className="flex-1"
+            onClick={() => alert("Card clicked!")}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "32px" }}
+            >
+              {/* Email Row */}
+              <div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: "600",
+                    color: "#94a3b8",
+                    letterSpacing: "0.5px",
+                    textTransform: "uppercase",
+                    marginBottom: "8px",
+                  }}
+                >
+                  EMAIL ID
+                </div>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "16px" }}
+                >
+                  <a
+                    href="mailto:kiran+111@logic-square.com"
+                    style={{
+                      fontSize: "16px",
+                      color: "#0f172a",
+                      textDecoration: "underline",
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    kiran+111@logic-square.com
+                  </a>
+                  <a
+                    href="mailto:kiran+111@logic-square.com"
+                    style={{
+                      fontSize: "16px",
+                      color: "#0f172a",
+                      textDecoration: "underline",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Send Email
+                  </a>
+                </div>
+              </div>
+
+              {/* Phone and Job Title Row */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "24px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    PHONE NUMBER
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>
+                    (+91) 9876567689
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    JOB TITLE
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>
+                    Not Provided
+                  </div>
+                </div>
+              </div>
+
+              {/* Location and Daily Export Row */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "24px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    LOCATION
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>
+                    Kolkata
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    DAILY EXPORT LIMIT LEFT
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>50</div>
+                </div>
+              </div>
+            </div>
+          </CustomCard>
+
+          <CustomCard
+            title="Basic Info"
+            headerBgColor="#EEF2FF"
+            footer={
+              <div className="flex gap-2">
+                <CustomButton text="Cancel" variant="outline" />
+                <CustomButton text="Save" variant="default" />
+              </div>
+            }
+            className="flex-1"
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "32px" }}
+            >
+              {/* Email Row */}
+              <div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: "600",
+                    color: "#94a3b8",
+                    letterSpacing: "0.5px",
+                    textTransform: "uppercase",
+                    marginBottom: "8px",
+                  }}
+                >
+                  EMAIL ID
+                </div>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "16px" }}
+                >
+                  <a
+                    href="mailto:kiran+111@logic-square.com"
+                    style={{
+                      fontSize: "16px",
+                      color: "#0f172a",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    kiran+111@logic-square.com
+                  </a>
+                  <a
+                    href="mailto:kiran+111@logic-square.com"
+                    style={{
+                      fontSize: "16px",
+                      color: "#0f172a",
+                      textDecoration: "underline",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Send Email
+                  </a>
+                </div>
+              </div>
+
+              {/* Phone and Job Title Row */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "24px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    PHONE NUMBER
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>
+                    (+91) 9876567689
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    JOB TITLE
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>
+                    Not Provided
+                  </div>
+                </div>
+              </div>
+
+              {/* Location and Daily Export Row */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "24px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    LOCATION
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>
+                    Kolkata
+                  </div>
+                </div>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      color: "#94a3b8",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    DAILY EXPORT LIMIT LEFT
+                  </div>
+                  <div style={{ fontSize: "16px", color: "#0f172a" }}>50</div>
+                </div>
+              </div>
+            </div>
+          </CustomCard>
         </div>
       </div>
     </div>

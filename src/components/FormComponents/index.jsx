@@ -7,6 +7,7 @@ import CustomBadge from "./CustomBadge";
 import CustomSwitch from "./CustomSwitch";
 import CustomLogo from "./CustomLogo";
 import CustomCard from "./CustomCard";
+import CustomSelect from "./CustomSelect";
 import { useState } from "react";
 import {
   User,
@@ -57,6 +58,13 @@ const CustomForm = () => {
   const [switchEnabled, setSwitchEnabled] = useState(false);
   const [switchWithLabel, setSwitchWithLabel] = useState(true);
   const [requiredSwitch, setRequiredSwitch] = useState(false);
+
+  // Select dropdown states
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
 
   const _onChangeFormFields = (key, value) => {
     const newFormFields = { ...formFields };
@@ -680,6 +688,186 @@ const CustomForm = () => {
               </div>
             </div>
           </CustomCard>
+        </div>
+      </div>
+
+      {/* CustomSelect Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">CustomSelect Examples</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Basic select */}
+          <div>
+            <CustomSelect
+              label="Country"
+              options={[
+                "United States",
+                "United Kingdom",
+                "Canada",
+                "Australia",
+                "Germany",
+              ]}
+              value={selectedCountry}
+              onChange={setSelectedCountry}
+              placeholder="Select a country"
+            />
+            {selectedCountry && (
+              <p
+                style={{ marginTop: "8px", fontSize: "13px", color: "#64748b" }}
+              >
+                Selected: {selectedCountry}
+              </p>
+            )}
+          </div>
+
+          {/* Searchable select */}
+          <div>
+            <CustomSelect
+              label="Status"
+              options={[
+                { value: "active", label: "Active" },
+                { value: "inactive", label: "Inactive" },
+                { value: "pending", label: "Pending" },
+                { value: "archived", label: "Archived" },
+              ]}
+              value={selectedStatus}
+              onChange={setSelectedStatus}
+              placeholder="Select status"
+              isSearchable
+              helperText="Searchable dropdown"
+            />
+          </div>
+
+          {/* Searchable + Clearable */}
+          <div>
+            <CustomSelect
+              label="Department"
+              options={[
+                { value: "engineering", label: "Engineering" },
+                { value: "marketing", label: "Marketing" },
+                { value: "sales", label: "Sales" },
+                { value: "hr", label: "Human Resources" },
+              ]}
+              value={selectedDepartment}
+              onChange={setSelectedDepartment}
+              placeholder="Select department"
+              required
+              isSearchable
+              isClearable
+              error={!selectedDepartment ? "Department is required" : ""}
+              helperText="Searchable with clear button"
+            />
+          </div>
+
+          {/* Multi-select */}
+          <div>
+            <CustomSelect
+              label="Skills"
+              options={[
+                { value: "javascript", label: "JavaScript" },
+                { value: "react", label: "React" },
+                { value: "nodejs", label: "Node.js" },
+                { value: "python", label: "Python" },
+                { value: "java", label: "Java" },
+                { value: "typescript", label: "TypeScript" },
+              ]}
+              value={selectedSkills}
+              onChange={setSelectedSkills}
+              placeholder="Select skills"
+              isMulti
+              helperText="Multi-select dropdown"
+            />
+            {selectedSkills.length > 0 && (
+              <p
+                style={{ marginTop: "8px", fontSize: "13px", color: "#64748b" }}
+              >
+                Selected: {selectedSkills.join(", ")}
+              </p>
+            )}
+          </div>
+
+          {/* Multi-select + Searchable + Clearable */}
+          <div>
+            <CustomSelect
+              label="Languages"
+              options={[
+                "English",
+                "Spanish",
+                "French",
+                "German",
+                "Chinese",
+                "Japanese",
+                "Korean",
+                "Arabic",
+              ]}
+              value={selectedLanguages}
+              onChange={setSelectedLanguages}
+              placeholder="Select languages"
+              isMulti
+              isSearchable
+              isClearable
+              helperText="Multi-select with search and clear"
+            />
+          </div>
+
+          {/* Small size with search */}
+          <div>
+            <CustomSelect
+              label="Priority"
+              size="sm"
+              options={["Low", "Medium", "High", "Critical"]}
+              placeholder="Select priority"
+              isSearchable
+              isClearable
+            />
+          </div>
+
+          {/* Large size with search */}
+          <div>
+            <CustomSelect
+              label="Category"
+              size="defausdslt"
+              options={[
+                { value: "tech", label: "Technology" },
+                { value: "business", label: "Business" },
+                { value: "design", label: "Design" },
+              ]}
+              placeholder="Select category"
+              isSearchable
+            />
+          </div>
+
+          {/* Disabled select */}
+          <div>
+            <CustomSelect
+              label="Region"
+              options={["North", "South", "East", "West"]}
+              disabled
+              value="North"
+              placeholder="Select region"
+            />
+          </div>
+        </div>
+
+        {/* Full width searchable multi-select */}
+        <div>
+          <CustomSelect
+            label="Projects"
+            options={[
+              { value: "project1", label: "Website Redesign" },
+              { value: "project2", label: "Mobile App Development" },
+              { value: "project3", label: "API Integration" },
+              { value: "project4", label: "Database Migration" },
+              { value: "project5", label: "Security Audit" },
+              { value: "project6", label: "Cloud Migration" },
+              { value: "project7", label: "Performance Optimization" },
+            ]}
+            placeholder="Select projects"
+            isMulti
+            isSearchable
+            isClearable
+            helperText="Search and select multiple projects"
+          />
         </div>
       </div>
     </div>

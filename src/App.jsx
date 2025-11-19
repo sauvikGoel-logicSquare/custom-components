@@ -35,6 +35,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import "./App.css";
+import CustomForm from "./components/FormComponents";
 
 function App() {
   // Modal state management
@@ -781,6 +782,8 @@ function App() {
             Error: {error}
           </div>
         )}
+
+        <CustomForm />
 
         {!loading && !error && (
           <>

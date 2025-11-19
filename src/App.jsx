@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/tooltip";
 import "./App.css";
 import CustomForm from "./components/FormComponents";
+import SortableDataTable from "./components/SortableTable/SortableDataTable";
 
 function App() {
   // Modal state management
@@ -167,6 +168,16 @@ function App() {
   const handlePageSizeChange = (newPageSize) => {
     setPageSize(newPageSize);
     setCurrentPage(1); // Reset to first page when page size changes
+  };
+
+  /**
+   * Handle row reorder for sortable table
+   * Called when rows are dragged and dropped to new positions
+   */
+  const handleRowReorder = (newDataArray) => {
+    console.log("Rows reordered:", newDataArray);
+    // You can update your data source here if needed
+    // For now, we'll just log it since the table manages its own state
   };
 
   /**
@@ -836,6 +847,33 @@ function App() {
               // show/hide columns list, -- pass the accessorKey of the columns to show/hide
               showColumnsList={["designation", "currentCompany"]}
             />
+
+            {/* Sortable Table Component - Drag and Drop Rows */}
+            <>
+              <h2 style={{ marginTop: "40px" }}>
+                Sortable Candidates Table (Drag & Drop Rows)
+              </h2>
+
+              <SortableDataTable
+                data={data}
+                headerData={headerData}
+                onRowReorder={handleRowReorder}
+                selectedIds={selectedIds}
+                onSelection={handleSelection}
+                size="large"
+                selectedRowClassName="bg-red-500"
+                showPagination={true}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={totalItems}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
+                pageSizeOptions={[10, 20, 50, 100]}
+                showSelectionCheckbox={true}
+                showColumnsList={["designation", "currentCompany"]}
+              />
+            </>
           </>
         )}
 

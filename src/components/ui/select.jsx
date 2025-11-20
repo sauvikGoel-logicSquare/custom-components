@@ -152,42 +152,51 @@ const SelectLabel = React.forwardRef(({ className, ...props }, ref) => (
 SelectLabel.displayName = SelectPrimitive.Label?.displayName || "SelectLabel";
 
 const SelectItem = React.forwardRef(
-  ({ className, children, ...props }, ref) => (
-    <SelectPrimitive.Item
-      ref={ref}
-      style={{
-        position: "relative",
-        display: "flex",
-        cursor: "pointer",
-        userSelect: "none",
-        alignItems: "center",
-        borderRadius: "4px",
-        padding: "8px 12px 8px 32px",
-        fontSize: "14px",
-        color: "#1e293b",
-        outline: "none",
-        transition: "background-color 0.2s",
-        backgroundColor: "transparent",
-      }}
-      className={className || ""}
-      onFocus={(e) => {
-        e.currentTarget.style.backgroundColor = "#f1f5f9";
-        e.currentTarget.style.color = "#1e293b";
-      }}
-      onBlur={(e) => {
-        e.currentTarget.style.backgroundColor = "transparent";
-        e.currentTarget.style.color = "#1e293b";
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#f1f5f9";
-        e.currentTarget.style.color = "#1e293b";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "transparent";
-        e.currentTarget.style.color = "#1e293b";
-      }}
-      {...props}
-    >
+  ({ className, children, disabled, ...props }, ref) => {
+    const isDisabled = disabled || props.disabled;
+    
+    return (
+      <SelectPrimitive.Item
+        ref={ref}
+        disabled={isDisabled}
+        style={{
+          position: "relative",
+          display: "flex",
+          cursor: isDisabled ? "not-allowed" : "pointer",
+          userSelect: "none",
+          alignItems: "center",
+          borderRadius: "4px",
+          padding: "8px 12px 8px 32px",
+          fontSize: "14px",
+          color: isDisabled ? "#94a3b8" : "#1e293b",
+          outline: "none",
+          transition: "background-color 0.2s",
+          backgroundColor: "transparent",
+          opacity: isDisabled ? 0.5 : 1,
+        }}
+        className={className || ""}
+        onFocus={(e) => {
+          if (!isDisabled) {
+            e.currentTarget.style.backgroundColor = "#f1f5f9";
+            e.currentTarget.style.color = "#1e293b";
+          }
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.backgroundColor = "transparent";
+          e.currentTarget.style.color = isDisabled ? "#94a3b8" : "#1e293b";
+        }}
+        onMouseEnter={(e) => {
+          if (!isDisabled) {
+            e.currentTarget.style.backgroundColor = "#f1f5f9";
+            e.currentTarget.style.color = "#1e293b";
+          }
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = "transparent";
+          e.currentTarget.style.color = isDisabled ? "#94a3b8" : "#1e293b";
+        }}
+        {...props}
+      >
       <span
         style={{
           position: "absolute",
@@ -198,12 +207,13 @@ const SelectItem = React.forwardRef(
         }}
       >
         <SelectPrimitive.ItemIndicator>
-          <Check style={{ height: "16px", width: "16px", color: "#667eea" }} />
+          <Check style={{ height: "16px", width: "16px", color: isDisabled ? "#94a3b8" : "#667eea" }} />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
-  )
+    );
+  }
 );
 SelectItem.displayName = SelectPrimitive.Item?.displayName || "SelectItem";
 

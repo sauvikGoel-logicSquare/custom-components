@@ -37,6 +37,7 @@ import {
 import "./App.css";
 import CustomForm from "./components/FormComponents";
 import SortableDataTable from "./components/SortableTable/SortableDataTable";
+import DateTimePicker from "./components/DateTimePicker";
 
 function App() {
   // Modal state management
@@ -54,6 +55,14 @@ function App() {
 
   // Simple selection state - just an array of selected candidate IDs
   const [selectedIds, setSelectedIds] = useState([]);
+
+  // DateTimePicker state
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    from: undefined,
+    to: undefined,
+  });
+  const [selectedTime, setSelectedTime] = useState(new Date());
 
   /**
    * Handle row click from DataTable
@@ -874,6 +883,63 @@ function App() {
                 showColumnsList={["designation", "currentCompany"]}
               />
             </>
+
+            {/* DateTimePicker Components */}
+            <div
+              style={{
+                marginTop: "60px",
+                padding: "32px",
+                backgroundColor: "#f8fafc",
+                borderRadius: "12px",
+                border: "1px solid #e2e8f0",
+              }}
+            >
+              <h2
+                style={{
+                  marginBottom: "24px",
+                  fontSize: "24px",
+                  fontWeight: "700",
+                  color: "#0f172a",
+                }}
+              >
+                Date & Time Pickers
+              </h2>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "24px",
+                }}
+              >
+                <DateTimePicker
+                  type="date"
+                  title="Select Date"
+                  placeholder="Pick a date"
+                  value={selectedDate}
+                  onChange={setSelectedDate}
+                  className="date-picker-custom"
+                  style={{ maxWidth: "100%" }}
+                />
+                <DateTimePicker
+                  type="date-range"
+                  title="Select Date Range"
+                  placeholder="Pick a date range"
+                  value={selectedDateRange}
+                  onChange={setSelectedDateRange}
+                  className="date-range-picker-custom"
+                  style={{ maxWidth: "100%" }}
+                />
+                <DateTimePicker
+                  type="time"
+                  title="Select Time"
+                  placeholder="Select time"
+                  value={selectedTime}
+                  onChange={setSelectedTime}
+                  className="time-picker-custom"
+                  style={{ maxWidth: "100%" }}
+                />
+              </div>
+            </div>
           </>
         )}
 

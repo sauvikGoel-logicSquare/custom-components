@@ -786,6 +786,8 @@ function App() {
   return (
     <TooltipProvider>
       <div className="app-container">
+        <CustomForm />
+
         <h1>Candidates Table</h1>
         <p className="app-description">
           View and manage candidate data. Click on a candidate name to view
@@ -802,8 +804,6 @@ function App() {
             Error: {error}
           </div>
         )}
-
-        <CustomForm />
 
         {!loading && !error && (
           <>

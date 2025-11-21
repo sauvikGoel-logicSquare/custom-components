@@ -1,18 +1,25 @@
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { flexRender } from "@tanstack/react-table";
+import { GripVertical } from "lucide-react";
 
 /**
  * TableBody Component
  * Renders the table body section with rows and cells
  * Supports JSX elements directly in cell data
+ * Supports optional drag-and-drop functionality
  * @param {Object} table - TanStack Table instance
  * @param {Function} onRowClick - Function to call when a row is clicked
  * @param {string|number} selectedIds - IDs of the currently selected rows
+ * @param {string} selectedRowClassName - Optional custom CSS class name for selected rows
+ * @param {boolean} isSortable - Whether to enable drag-and-drop row reordering
  */
 function TableBody({
   table,
   // onRowClick
   selectedIds,
   selectedRowClassName,
+  isSortable = false,
 }) {
   return (
     <tbody className="table-body">
@@ -34,6 +41,17 @@ function TableBody({
        * - The table instance is created in DataTable.jsx using useReactTable() hook
        */}
       {table.getRowModel().rows.map((row) => {
+        if (isSortable) {
+          return (
+            <SortableRow
+              key={row.id}
+              row={row}
+              selectedIds={selectedIds}
+              selectedRowClassName={selectedRowClassName}
+            />
+          );
+        }
+
         const isSelected = selectedIds?.includes(row?.id);
         // Check if this row's name cell should be clickable
         // Add isClickable: true/false in your data object to control which names are clickable
@@ -132,6 +150,65 @@ function TableBody({
         );
       })}
     </tbody>
+  );
+}
+
+/**
+ * SortableRow Component
+ * Individual sortable row with drag handle
+ * Only used when isSortable is true
+ */
+function SortableRow({ row, selectedIds, selectedRowClassName }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: row.id,
+  });
+
+  const isSelected = selectedIds?.includes(row?.id);
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  // Filter out drag-handle column from visible cells (we render it separately)
+  const visibleCells = row
+    .getVisibleCells()
+    .filter((cell) => cell.column.id !== "drag-handle");
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      className={`body-row ${isSelected ? "body-row-selected" : ""} ${
+        isSelected && selectedRowClassName ? selectedRowClassName : ""
+      } ${isDragging ? "body-row-dragging" : ""}`}
+    >
+      {/* Drag Handle Column - always first */}
+      <td className="body-cell drag-handle-cell" {...attributes} {...listeners}>
+        <GripVertical
+          className="drag-handle-icon"
+          size={16}
+          style={{ cursor: "grab", color: "#94a3b8" }}
+        />
+      </td>
+
+      {/* Regular Data Cells (excluding drag-handle) */}
+      {visibleCells.map((cell) => {
+        return (
+          <td key={cell.id} className="body-cell">
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </td>
+        );
+      })}
+    </tr>
   );
 }
 

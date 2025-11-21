@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { generateRandomId } from "@/utils/helper-methods";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const CustomInput = ({
@@ -26,24 +26,74 @@ const CustomInput = ({
   rightIcon, // optional, used to display the right icon in the input
   onLeftIconClick, // optional, used to handle the click event of the left icon
   onRightIconClick, // optional, used to handle the click event of the right icon
+  checkUniqueness = false, // optional, used to enable uniqueness checking
+  uniqueCheckFn, // required if checkUniqueness is true, function to check uniqueness, returns { isUnique: boolean, message?: string }
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isCheckingUniqueness, setIsCheckingUniqueness] = useState(false);
+  // const [uniquenessError, setUniquenessError] = useState("");
+  const [isUnique, setIsUnique] = useState(null); // null = not checked, true = unique, false = not unique
+
+  // Handle uniqueness check on blur
+  const _handleBlur = async () => {
+    // Reset uniqueness state when value is empty
+    if (!value || !value.trim()) {
+      setIsUnique(null);
+      // setUniquenessError("");
+      return;
+    }
+
+    // Only check uniqueness if checkUniqueness is true and uniqueCheckFn is provided
+    if (checkUniqueness && uniqueCheckFn) {
+      setIsCheckingUniqueness(true);
+      // setUniquenessError("");
+      setIsUnique(null);
+
+      try {
+        const result = await uniqueCheckFn(value);
+
+        // The result should have { isUnique: boolean, message?: string }
+        if (result?.isUnique) {
+          setIsUnique(true);
+          // setUniquenessError("");
+        } else {
+          setIsUnique(false);
+          // setUniquenessError(result?.message || "This value is already taken");
+        }
+      } catch (err) {
+        console.error("Error checking uniqueness:", err);
+        setIsUnique(false);
+        // setUniquenessError(
+        //   err?.message || "Failed to verify uniqueness. Please try again."
+        // );
+      } finally {
+        setIsCheckingUniqueness(false);
+      }
+    }
+  };
+
+  // // Determine the actual error to display (prioritize validation error over uniqueness error)
+  // const displayError = error || uniquenessError;
+
+  // Determine if we should show the uniqueness icon
+  const shouldShowUniquenessIcon =
+    checkUniqueness && !disabled && type !== "textarea" && type !== "password";
 
   return (
-    <div className="space-y-2 w-full">
+    <div className="space-y-2.5 w-full">
       {/* Label */}
       {label ? (
         <Label
           htmlFor={id}
           className={cn(
             "text-sm font-medium text-heading-dark",
-            disabled && "opacity-50",
-            error && "text-destructive"
+            disabled && "opacity-50"
+            // error && "text-red-600"
           )}
           title={title}
         >
           {label}
-          {isRequired ? <span className="text-destructive ml-1">*</span> : null}
+          {isRequired ? <span className="text-red-500 ml-1">*</span> : null}
         </Label>
       ) : null}
 
@@ -70,9 +120,12 @@ const CustomInput = ({
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={_handleBlur}
             className={cn(
               "text-base rounded-[10px] resize-none",
-              error && "border-destructive focus-visible:ring-destructive",
+              "border-gray-200! focus-visible:border-gray-400!",
+              "focus-visible:ring-0! focus-visible:ring-offset-0! focus-visible:outline-none!",
+              error && "border-red-300! focus-visible:border-red-400!",
               className
             )}
             disabled={disabled}
@@ -93,11 +146,15 @@ const CustomInput = ({
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={_handleBlur}
             className={cn(
               "h-12 text-base rounded-[10px]",
-              error && "border-destructive focus-visible:ring-destructive",
+              "border-gray-200! focus-visible:border-gray-400!",
+              "focus-visible:ring-0! focus-visible:ring-offset-0! focus-visible:outline-none!",
+              error && "border-red-300! focus-visible:border-red-400!",
               leftIcon && "pl-10",
-              (rightIcon || type === "password") && "pr-10",
+              (rightIcon || type === "password" || shouldShowUniquenessIcon) &&
+                "pr-10",
               className
             )}
             disabled={disabled}
@@ -109,7 +166,7 @@ const CustomInput = ({
           />
         )}
 
-        {/* Right Icon or Password Toggle */}
+        {/* Right Icon or Password Toggle or Uniqueness Indicator */}
         {type === "password" ? (
           <Button
             type="button"
@@ -129,6 +186,16 @@ const CustomInput = ({
               {showPassword ? "Hide password" : "Show password"}
             </span>
           </Button>
+        ) : shouldShowUniquenessIcon ? (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10">
+            {isCheckingUniqueness ? (
+              <Loader2 className="h-4 w-4 text-muted-foreground animate-spin" />
+            ) : isUnique === true ? (
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            ) : isUnique === false ? (
+              <XCircle className="h-4 w-4 text-red-500" />
+            ) : null}
+          </div>
         ) : rightIcon && type !== "textarea" ? (
           <div
             className={cn(
@@ -147,7 +214,7 @@ const CustomInput = ({
 
       {/* Error Message */}
       {error ? (
-        <p id={`${id}-error`} className="text-sm text-destructive" role="alert">
+        <p id={`${id}-error`} className="text-sm text-red-600" role="alert">
           {error}
         </p>
       ) : null}

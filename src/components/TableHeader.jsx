@@ -34,10 +34,14 @@ function TableHeader({ table, headerData = [] }) {
              * We detect it by checking if columnId === "select"
              */
             const isCheckboxColumn = columnId === "select";
+            const isDragHandleColumn = columnId === "drag-handle";
 
             return (
               <th key={header.id} className="header-cell">
-                {isCheckboxColumn ? (
+                {isDragHandleColumn ? (
+                  // Drag handle header - empty
+                  <div className="drag-handle-header"></div>
+                ) : isCheckboxColumn ? (
                   /**
                    * RENDER HEADER CHECKBOX (Select All Checkbox)
                    * ============================================

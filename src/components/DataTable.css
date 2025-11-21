@@ -471,6 +471,79 @@
   border-width: 0;
 }
 
+/* Drag and Drop Styles */
+.drag-handle-header {
+  width: 40px;
+  min-width: 40px;
+  padding: 0;
+  background-color: transparent;
+}
+
+/* Drag handle header cell styling - only applies when drag-handle-header exists */
+.header-cell:has(.drag-handle-header) {
+  width: 40px;
+  min-width: 40px;
+  padding: 16px 8px;
+}
+
+.data-table-small .header-cell:has(.drag-handle-header) {
+  width: 32px;
+  min-width: 32px;
+  padding: 10px 6px;
+}
+
+.data-table-large .header-cell:has(.drag-handle-header) {
+  width: 48px;
+  min-width: 48px;
+  padding: 20px 10px;
+}
+
+.drag-handle-cell {
+  width: 40px;
+  padding: 16px 8px !important;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+}
+
+.drag-handle-cell:active {
+  cursor: grabbing;
+}
+
+.drag-handle-icon {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.drag-handle-cell:hover .drag-handle-icon {
+  color: #667eea;
+  transform: scale(1.2);
+}
+
+.body-row-dragging {
+  background-color: #f1f5f9 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 2px dashed #667eea !important;
+  z-index: 1000;
+}
+
+/* Drag handle cell size variants */
+.data-table-small .drag-handle-cell {
+  width: 32px;
+  padding: 10px 6px !important;
+}
+
+.data-table-medium .drag-handle-cell {
+  width: 40px;
+  padding: 16px 8px !important;
+}
+
+.data-table-large .drag-handle-cell {
+  width: 48px;
+  padding: 20px 10px !important;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .data-table-wrapper {

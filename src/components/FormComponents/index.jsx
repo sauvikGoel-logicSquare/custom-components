@@ -21,8 +21,17 @@ import {
   Star,
   Check,
 } from "lucide-react";
+import InfiniteScrollDropdown from "./InfiniteScrollDropdown";
+import { useRef } from "react";
+
+const initialDropDownPayload = {
+  page: 1,
+  limit: 50,
+};
 
 const CustomForm = () => {
+  const searchRef = useRef({ current: null });
+
   const [formFields, setFormFields] = useState({
     name: "",
     email: "",
@@ -66,6 +75,24 @@ const CustomForm = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
 
+  // InfiniteScrollDropdown states
+  const [dropdownPayload, setDropdownPayload] = useState(
+    JSON.parse(JSON.stringify(initialDropDownPayload))
+  );
+  const [leads, setLeads] = useState([]);
+  const [totalLeadsData, setTotalLeadsData] = useState({
+    pages: 0,
+    count: 0,
+    overAllTotalCount: 0,
+  });
+  const [loading, setLoading] = useState({
+    saveLoading: false,
+  });
+
+  const _manageLoading = (key, value) => {
+    setLoading((prevLoading) => ({ ...prevLoading, [key]: value }));
+  };
+
   const _onChangeFormFields = (key, value) => {
     const newFormFields = { ...formFields };
     const newIsDirty = { ...isDirty };
@@ -100,6 +127,165 @@ const CustomForm = () => {
 
       resolve(isFormValid);
     });
+  };
+
+  const _onLeadSelect = (leadId) => {
+    const newFormFields = { ...formFields };
+    const newIsDirty = { ...isDirty };
+
+    const leadData = leads?.find((each) => each?._id === leadId?.value);
+
+    newFormFields["lead"] = leadId;
+
+    if (leadData?.location) {
+      newFormFields["location"] = {};
+      if (leadData?.location?.isOther) {
+        newFormFields["location"]["label"] = "Other";
+        newFormFields["location"]["value"] = "Other";
+        newFormFields["otherLocationCity"] = leadData?.location?.city;
+        newFormFields["otherLocationState"] = leadData?.location?.state;
+      } else {
+        newFormFields["location"]["label"] = leadData?.location?.city;
+        newFormFields["location"]["value"] = leadData?.location?.city;
+      }
+    }
+
+    if (leadData?.name) {
+      newFormFields["name"] =
+        leadData?.name?.full ||
+        leadData?.name?.first ||
+        leadData?.name?.last ||
+        "";
+    }
+
+    if (leadData?.email) {
+      newFormFields["email"] = leadData?.email || "";
+    }
+
+    if (leadData?.phone) {
+      newFormFields["phone"] = leadData?.phone || "";
+    }
+
+    if (leadData?.linkedinProfileLink) {
+      newFormFields["linkedinUrl"] = leadData?.linkedinProfileLink || "";
+    }
+
+    setFormFields(newFormFields);
+
+    _validateFormFields({ newFormFields, newIsDirty });
+  };
+
+  const _onInputChange = async (value) => {
+    try {
+      // if (!value?.length) {
+      //   if (
+      //     actionMeta.action !== "input-backspace" ||
+      //     actionMeta.action !== "menu-close"
+      //   ) {
+      //     return;
+      //   }
+      // }
+
+      if (leads?.length === totalLeadsData?.overAllTotalCount) {
+        return; // no need to fetch more if all leads are already loaded
+      }
+
+      _manageLoading("getAllLeadsLoading", true);
+      let payload;
+
+      if (!value?.length) {
+        payload = JSON.parse(JSON.stringify(initialDropDownPayload));
+      } else {
+        payload = {
+          name: value,
+        };
+      }
+
+      clearTimeout(searchRef.current);
+
+      searchRef.current = setTimeout(async () => {
+        const res = await getAllLeads(payload);
+
+        const newOptions = res?.candidate?.map((obj) => ({
+          ...obj,
+          label: obj?.name?.full || obj?.name?.first || obj?.name?.last || "",
+          value: obj?._id,
+        }));
+
+        setLeads(newOptions || []);
+
+        setTotalLeadsData({
+          pages: Math.ceil(res?.totalCount / payload?.limit),
+          count: res?.totalCount,
+          overAllTotalCount: res?.overAllTotalCount,
+        });
+
+        _manageLoading("getAllLeadsLoading", false);
+      }, 1000);
+    } catch (err) {
+      console.log({ err });
+      // errorHandler(err);
+      _manageLoading("getAllLeadsLoading", false);
+    }
+  };
+
+  const getAllLeads = async (payload) => {
+    const res = await fetch(
+      "https://api-dev.smoothire.com/api/v1/find/external/user",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMzI3YWNiNmFiYTYwMTA5NzhiZDFiMiIsIl9pZCI6IjVmMzI3YWNiNmFiYTYwMTA5NzhiZDFiMiIsImZ1bGxOYW1lIjoiQWxleCBTaHJtYSIsImVtYWlsIjoiYWJoaXNoZWsuc2hhcm1hK2FsZXhAbG9naWMtc3F1YXJlLmNvbSIsInBob25lIjoiNzg0Nzg2MzQ3NSIsIm9yZ2FuaXphdGlvbklkIjoiNWYzMjdhY2I2YWJhNjAxMDk3OGJkMmIwIiwib3JnYW5pemF0aW9uQ2F0ZWdvcnkiOiJhZ2VuY3kiLCJyb2xlIjoiYWRtaW4iLCJwcm9maWxlUGljVXJsIjoiaHR0cHM6Ly9zbW9vdGhpcmUtZGV2LnMzLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tL291dHB1dC1vbmxpbmVwbmd0b29scy5wbmciLCJpc1JlY3J1aXRlck1hbmFnZXIiOmZhbHNlLCJpc1Nlbmlvck1hbmFnZXIiOmZhbHNlLCJkZXZpY2VJZCI6ImU4ZGMwZmM4LWJjNWEtNDkyMS1iMWI2LWE2NDllYWQyMzA0OCIsImNvdW50cnlDb2RlIjoiKzkxIiwiY3VycmVuY3kiOiJJTlIiLCJjb3VudHJ5TmFtZSI6IklOIiwiaWF0IjoxNzYyOTMzMzEyLCJleHAiOjE3NjU1MjUzMTJ9.WgONe7uA8AQw5_kp-atRmhk2Xkb-4hytwf_l8XmM7zs",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const data = await res?.json();
+    return data;
+  };
+
+  const _getAllLeads = async (payload) => {
+    _manageLoading("getAllLeadsLoading", true);
+    try {
+      let newLeads = [...leads];
+      // newLeads?.push({
+      //   // label: <i className="fa fa-spinner fa-spin mr-1" />,
+      //   label: "Loading...",
+      //   value: "loading",
+      //   isDisabled: true,
+      // });
+
+      setLeads(newLeads);
+      const res = await getAllLeads(payload);
+
+      // removing the loading item added above
+      // newLeads?.pop();
+
+      // now concatenating the latest results with previous ones
+      const newOptions = newLeads.concat(
+        res?.candidate?.map((obj) => ({
+          ...obj,
+          label: obj?.name?.full || obj?.name?.first || obj?.name?.last || "",
+          value: obj?._id,
+        }))
+      );
+
+      setLeads(newOptions || []);
+
+      setTotalLeadsData({
+        pages: Math.ceil(res?.totalCount / payload?.limit),
+        count: res?.totalCount,
+        overAllTotalCount: res?.overAllTotalCount,
+      });
+    } catch (err) {
+      console.log({ err });
+      // errorHandler(err);
+    } finally {
+      _manageLoading("getAllLeadsLoading", false);
+    }
   };
 
   console.log({ errors, isDirty, formFields });
@@ -869,6 +1055,31 @@ const CustomForm = () => {
             helperText="Search and select multiple projects"
           />
         </div>
+      </div>
+
+      {/* InfiniteScrollDropdown Examples */}
+      <div className="space-y-4 mt-8">
+        <h2 className="text-xl font-semibold">
+          InfiniteScrollDropdown Examples
+        </h2>
+        <h3 className="text-lg font-semibold">Existing Leads</h3>
+        <InfiniteScrollDropdown
+          isClearable={true}
+          optionsConfig={leads}
+          onChangeFunc={(value) => _onLeadSelect(value)}
+          onInputChange={(value, actionMeta) =>
+            _onInputChange(value, actionMeta)
+          }
+          value={formFields?.lead}
+          totalDataCount={totalLeadsData?.count}
+          totalDataPages={totalLeadsData?.pages}
+          updateOptionsConfig={(payload) => _getAllLeads(payload)}
+          dropdownPayload={dropdownPayload}
+          setDropdownPayload={(newDropDownPayload) =>
+            setDropdownPayload(newDropDownPayload)
+          }
+          isLoading={loading?.getAllLeadsLoading}
+        />
       </div>
     </div>
   );

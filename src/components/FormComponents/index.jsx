@@ -35,6 +35,7 @@ const CustomForm = () => {
   const [formFields, setFormFields] = useState({
     name: "",
     email: "",
+    alternateEmail: "",
     phone: "",
     address: "",
     city: "",
@@ -45,6 +46,7 @@ const CustomForm = () => {
   const [isDirty, setIsDirty] = useState({
     name: false,
     email: false,
+    alternateEmail: false,
     phone: false,
     address: false,
     city: false,
@@ -55,6 +57,7 @@ const CustomForm = () => {
   const [errors, setErrors] = useState({
     name: "",
     email: "",
+    alternateEmail: "",
     phone: "",
     address: "",
     city: "",
@@ -91,6 +94,57 @@ const CustomForm = () => {
 
   const _manageLoading = (key, value) => {
     setLoading((prevLoading) => ({ ...prevLoading, [key]: value }));
+  };
+
+  // Example uniqueness check function for email
+  const _checkEmailUniqueness = async (email) => {
+    try {
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        const newErrors = { ...errors };
+        newErrors.email = "Invalid email address";
+        setErrors(newErrors);
+        return {
+          isUnique: false,
+          // message: "Invalid email address",
+        };
+      }
+
+      const response = await fetch(
+        "https://api-dev.smoothire.com/api/v1/check/email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMzI3YWNiNmFiYTYwMTA5NzhiZDFiMiIsIl9pZCI6IjVmMzI3YWNiNmFiYTYwMTA5NzhiZDFiMiIsImZ1bGxOYW1lIjoiQWxleCBTaHJtYSIsImVtYWlsIjoiYWJoaXNoZWsuc2hhcm1hK2FsZXhAbG9naWMtc3F1YXJlLmNvbSIsInBob25lIjoiNzg0Nzg2MzQ3NSIsIm9yZ2FuaXphdGlvbklkIjoiNWYzMjdhY2I2YWJhNjAxMDk3OGJkMmIwIiwib3JnYW5pemF0aW9uQ2F0ZWdvcnkiOiJhZ2VuY3kiLCJyb2xlIjoiYWRtaW4iLCJwcm9maWxlUGljVXJsIjoiaHR0cHM6Ly9zbW9vdGhpcmUtZGV2LnMzLnVzLWVhc3QtMi5hbWF6b25hd3MuY29tL291dHB1dC1vbmxpbmVwbmd0b29scy5wbmciLCJpc1JlY3J1aXRlck1hbmFnZXIiOmZhbHNlLCJpc1Nlbmlvck1hbmFnZXIiOmZhbHNlLCJkZXZpY2VJZCI6ImU4ZGMwZmM4LWJjNWEtNDkyMS1iMWI2LWE2NDllYWQyMzA0OCIsImNvdW50cnlDb2RlIjoiKzkxIiwiY3VycmVuY3kiOiJJTlIiLCJjb3VudHJ5TmFtZSI6IklOIiwiaWF0IjoxNzYyOTMzMzEyLCJleHAiOjE3NjU1MjUzMTJ9.WgONe7uA8AQw5_kp-atRmhk2Xkb-4hytwf_l8XmM7zs",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log({ data });
+
+      if (!data?.isAvailable) {
+        // if email is not available, set the error message here
+        const newErrors = { ...errors };
+        newErrors.email = "*This email is already registered";
+        setErrors(newErrors);
+      }
+
+      // now here return { isUnique: boolean, message?: string }
+      return {
+        isUnique: data?.isAvailable,
+        // message: !data?.isAvailable ? "This email is already registered" : "",
+      };
+    } catch (error) {
+      console.error("Error checking email uniqueness:", error);
+      return {
+        isUnique: false,
+        // message: "Failed to verify email. Please try again.",
+      };
+    }
   };
 
   const _onChangeFormFields = (key, value) => {
@@ -312,6 +366,32 @@ const CustomForm = () => {
         </CustomInputGroup>
       </div>
 
+      {/* Uniqueness Check Example */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">
+          Uniqueness Check Example (onBlur)
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Try entering an existing email (e.g., kiran+111@logic-square.com) and
+          click outside the input to see the uniqueness check in action.
+        </p>
+        <CustomInputGroup>
+          <CustomInput
+            label="Email Address"
+            type="email"
+            placeholder="Enter email to check uniqueness"
+            value={formFields?.email}
+            onChange={(value) => _onChangeFormFields("email", value)}
+            error={errors?.email}
+            leftIcon={<Mail className="h-4 w-4" />}
+            isRequired
+            checkUniqueness={true}
+            uniqueCheckFn={_checkEmailUniqueness}
+            helperText="Email will be validated for uniqueness when you leave this field (onBlur)"
+          />
+        </CustomInputGroup>
+      </div>
+
       {/* CustomInputGroup - 2 Columns Example */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">
@@ -319,12 +399,12 @@ const CustomForm = () => {
         </h2>
         <CustomInputGroup columns={2}>
           <CustomInput
-            label="Email"
+            label="Alternative Email"
             type="email"
-            placeholder="Enter your email"
-            value={formFields?.email}
-            onChange={(value) => _onChangeFormFields("email", value)}
-            error={errors?.email}
+            placeholder="Enter your alternate email"
+            value={formFields?.alternateEmail}
+            onChange={(value) => _onChangeFormFields("alternateEmail", value)}
+            error={errors?.alternateEmail}
             leftIcon={<Mail className="h-4 w-4" />}
             isRequired
           />
